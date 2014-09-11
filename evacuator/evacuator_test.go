@@ -1,6 +1,9 @@
 package evacuator_test
 
 import (
+	"time"
+
+	"github.com/apcera/nats"
 	"github.com/cloudfoundry/gunk/timeprovider/faketimeprovider"
 	"github.com/cloudfoundry/hm9000/config"
 	"github.com/cloudfoundry/hm9000/models"
@@ -9,9 +12,7 @@ import (
 	. "github.com/cloudfoundry/hm9000/testhelpers/custommatchers"
 	"github.com/cloudfoundry/hm9000/testhelpers/fakelogger"
 	"github.com/cloudfoundry/storeadapter/fakestoreadapter"
-	"github.com/cloudfoundry/yagnats"
 	"github.com/cloudfoundry/yagnats/fakeyagnats"
-	"time"
 
 	. "github.com/cloudfoundry/hm9000/evacuator"
 	. "github.com/onsi/ginkgo"
@@ -52,8 +53,8 @@ var _ = Describe("Evacuator", func() {
 	Context("when droplet.exited is received", func() {
 		Context("when the message is malformed", func() {
 			It("does nothing", func() {
-				messageBus.Subscriptions["droplet.exited"][0].Callback(&yagnats.Message{
-					Payload: []byte("ß"),
+				messageBus.Subscriptions["droplet.exited"][0].Callback(&nats.Msg{
+					Data: []byte("ß"),
 				})
 
 				pendingStarts, err := store.GetPendingStartMessages()
@@ -64,8 +65,8 @@ var _ = Describe("Evacuator", func() {
 
 		Context("when the reason is DEA_EVACUATION", func() {
 			BeforeEach(func() {
-				messageBus.Subscriptions["droplet.exited"][0].Callback(&yagnats.Message{
-					Payload: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonDEAEvacuation).ToJSON(),
+				messageBus.Subscriptions["droplet.exited"][0].Callback(&nats.Msg{
+					Data: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonDEAEvacuation).ToJSON(),
 				})
 			})
 
@@ -82,8 +83,8 @@ var _ = Describe("Evacuator", func() {
 
 		Context("when the reason is DEA_SHUTDOWN", func() {
 			BeforeEach(func() {
-				messageBus.Subscriptions["droplet.exited"][0].Callback(&yagnats.Message{
-					Payload: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonDEAShutdown).ToJSON(),
+				messageBus.Subscriptions["droplet.exited"][0].Callback(&nats.Msg{
+					Data: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonDEAShutdown).ToJSON(),
 				})
 			})
 
@@ -100,8 +101,8 @@ var _ = Describe("Evacuator", func() {
 
 		Context("when the reason is STOPPED", func() {
 			BeforeEach(func() {
-				messageBus.Subscriptions["droplet.exited"][0].Callback(&yagnats.Message{
-					Payload: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonStopped).ToJSON(),
+				messageBus.Subscriptions["droplet.exited"][0].Callback(&nats.Msg{
+					Data: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonStopped).ToJSON(),
 				})
 			})
 
@@ -114,8 +115,8 @@ var _ = Describe("Evacuator", func() {
 
 		Context("when the reason is CRASHED", func() {
 			BeforeEach(func() {
-				messageBus.Subscriptions["droplet.exited"][0].Callback(&yagnats.Message{
-					Payload: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonCrashed).ToJSON(),
+				messageBus.Subscriptions["droplet.exited"][0].Callback(&nats.Msg{
+					Data: app.InstanceAtIndex(1).DropletExited(models.DropletExitedReasonCrashed).ToJSON(),
 				})
 			})
 

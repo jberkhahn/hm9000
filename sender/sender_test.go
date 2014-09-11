@@ -156,7 +156,7 @@ var _ = Describe("Sender", func() {
 
 			It("should send the message", func() {
 				Ω(messageBus.PublishedMessages["hm9000.start"]).Should(HaveLen(1))
-				message, _ := models.NewStartMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.start"][0].Payload))
+				message, _ := models.NewStartMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.start"][0].Data))
 				Ω(message).Should(Equal(models.StartMessage{
 					AppGuid:       app.AppGuid,
 					AppVersion:    app.AppVersion,
@@ -330,7 +330,7 @@ var _ = Describe("Sender", func() {
 
 			It("should send the message", func() {
 				Ω(messageBus.PublishedMessages["hm9000.stop"]).Should(HaveLen(1))
-				message, _ := models.NewStopMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.stop"][0].Payload))
+				message, _ := models.NewStopMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.stop"][0].Data))
 				Ω(message).Should(Equal(models.StopMessage{
 					AppGuid:       app.AppGuid,
 					AppVersion:    app.AppVersion,
@@ -496,7 +496,7 @@ var _ = Describe("Sender", func() {
 
 			It("should send the start message", func() {
 				Ω(messageBus.PublishedMessages["hm9000.start"]).Should(HaveLen(1))
-				message, _ := models.NewStartMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.start"][0].Payload))
+				message, _ := models.NewStartMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.start"][0].Data))
 				Ω(message).Should(Equal(models.StartMessage{
 					AppGuid:       app.AppGuid,
 					AppVersion:    app.AppVersion,
@@ -630,7 +630,7 @@ var _ = Describe("Sender", func() {
 
 			It("should send the stop message", func() {
 				Ω(messageBus.PublishedMessages["hm9000.stop"]).Should(HaveLen(1))
-				message, _ := models.NewStopMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.stop"][0].Payload))
+				message, _ := models.NewStopMessageFromJSON([]byte(messageBus.PublishedMessages["hm9000.stop"][0].Data))
 				Ω(message).Should(Equal(models.StopMessage{
 					AppGuid:       app.AppGuid,
 					AppVersion:    app.AppVersion,

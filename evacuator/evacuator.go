@@ -1,6 +1,7 @@
 package evacuator
 
 import (
+	"github.com/apcera/nats"
 	"github.com/cloudfoundry/gunk/timeprovider"
 	"github.com/cloudfoundry/hm9000/config"
 	"github.com/cloudfoundry/hm9000/helpers/logger"
@@ -28,8 +29,8 @@ func New(messageBus yagnats.NATSClient, store store.Store, timeProvider timeprov
 }
 
 func (e *Evacuator) Listen() {
-	e.messageBus.Subscribe("droplet.exited", func(message *yagnats.Message) {
-		dropletExited, err := models.NewDropletExitedFromJSON([]byte(message.Payload))
+	e.messageBus.Subscribe("droplet.exited", func(message *nats.Msg) {
+		dropletExited, err := models.NewDropletExitedFromJSON([]byte(message.Data))
 		if err != nil {
 			e.logger.Error("Failed to parse droplet exited message", err)
 			return
